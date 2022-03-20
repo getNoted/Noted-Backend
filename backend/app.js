@@ -1,8 +1,10 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const bodyparser = require("body-parser");
 // api route
 const api = require("./routes/api");
 const app = express();
+app.use(bodyparser.json());
 app.use("/api", api);
 
 const mongodb = "mongodb://127.0.0.1/notedDB";
@@ -12,7 +14,6 @@ mongoose.connect(mongodb).catch((err) => {
 });
 
 const db = mongoose.connection;
-
 
 //to log errors after initial connection
 db.on("error", (err) => {
