@@ -1,5 +1,6 @@
 const brcrypt = require("bcrypt");
 const User = require("../models/user");
+const jwt = require("jsonwebtoken");
 
 const signup = async (req, res) => {
   const { email, username, password: plainTextPassword } = req.body;
@@ -12,9 +13,11 @@ const signup = async (req, res) => {
       username,
       password,
     });
+    const user_id=newUser._id;
+    const token=jwt.sign({username,email,user_id},process.env.JWT_AUTH_SECRET);
     res
       .status(200)
-      .json({ user: newUser, message: "user created successfully" });
+      .json({message: "user created successfully", token:token});
   } catch (err) {
     res.json({ message: err });
   }
