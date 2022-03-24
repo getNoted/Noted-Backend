@@ -13,11 +13,14 @@ const signup = async (req, res) => {
       username,
       password,
     });
-    const user_id=newUser._id;
-    const token=jwt.sign({username,email,user_id},process.env.JWT_AUTH_SECRET);
+    const user_id = newUser._id;
+    const token = jwt.sign(
+      { username, email, user_id },
+      process.env.JWT_AUTH_SECRET
+    );
     res
       .status(200)
-      .json({message: "user created successfully", token:token});
+      .json({ message: "user created successfully", token: token });
   } catch (err) {
     res.json({ message: err });
   }
