@@ -1,5 +1,5 @@
 const brcrypt = require("bcrypt");
-const User = require("../models/user");
+const User = require("../../models/user");
 const jwt = require("jsonwebtoken");
 
 const signup = async (req, res) => {
@@ -31,7 +31,8 @@ const signup = async (req, res) => {
         res.status(400).json({ message: "Username already exists" });
       }
     }
-    res.status(500).json({ message: err });
+
+    console.log(err);
   }
 };
 
