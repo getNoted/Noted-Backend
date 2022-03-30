@@ -1,5 +1,5 @@
 const brcrypt = require("bcrypt");
-const User = require("../models/user");
+const User = require("../../models/user");
 const jwt = require("jsonwebtoken");
 
 const signup = async (req, res) => {
@@ -22,7 +22,17 @@ const signup = async (req, res) => {
       .status(200)
       .json({ message: "user created successfully", token: token });
   } catch (err) {
-    res.json({ message: err });
+    if (err.code && err.code === 11000) {
+      if (err.keyPattern.hasOwnProperty("email")) {
+        res.status(400).json({ message: "Email already exists" });
+      }
+
+      if (err.keyPattern.hasOwnProperty("username")) {
+        res.status(400).json({ message: "Username already exists" });
+      }
+    }
+
+    console.log(err);
   }
 };
 
