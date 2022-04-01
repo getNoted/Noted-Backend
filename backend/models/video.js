@@ -3,7 +3,7 @@ const videotimestampSchema = new mongoose.Schema({
   note:{
     type: String,
     required: true,
-  }
+  },
   timestamp:{
     type: String,
     required: true,
@@ -28,7 +28,7 @@ const videoSchema = new mongoose.Schema({
   },
   notes:
     [videotimestampSchema]
-}, {timestamps: { createdAt: 'created_at' },{updatedAt: 'modified_on'}});
+}, {timestamps: { createdAt: 'created_at',updatedAt: 'modified_on'}});
 
 const Video = mongoose.model("Video", videoSchema);
 const VideoTimestamp = mongoose.model("VideoTimestamp", videotimestampSchema);
