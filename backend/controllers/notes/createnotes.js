@@ -1,7 +1,20 @@
 const jwt=require('jsonwebtoken');
 const Video =require('../../models/video');
 const url=require('url');
-
+const formattimestamp=(timestamp)=>{
+  const timearr = timestamp.split(":");
+  while (timearr.length !== 3) {
+    timearr.unshift("00");
+  }
+  let formattedtimestamp="";
+  timearr.forEach((element,index) => {
+      if(index===2) formattedtimestamp+=element;
+      else
+          formattedtimestamp+=element+":";
+  });
+  console.log(formattedtimestamp);
+  return formattedtimestamp;
+}
 const createnotes = async (req, res) => {
   const token = req.headers["authorization"].split(" ")[1];
  
@@ -11,12 +24,12 @@ const createnotes = async (req, res) => {
       res.status(404).json({message:"user not logged in"})
     }
     const user_id=user._id;
-    const {video_url,videoname:video_name,timestamp,content,foldername:folder}=req.body;
+    let {video_url,videoname:video_name,timestamp,content,foldername:folder}=req.body;
     console.log(video_url);
     const {v:video_id}=url.parse(video_url,true).query;
     
     const video=await Video.findOne({video_id, user_id});
-    
+    timestamp=formattimestamp(timestamp);
     if(video){
       const updatednotes=video.notes;
       updatednotes.set(timestamp,content);
