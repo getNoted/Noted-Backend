@@ -9,6 +9,7 @@ const signin = async (req, res) => {
     const user = await User.findOne({ email });
     if (!user) {
       res.status(404).json({ message: "User not found" });
+      return;
     }
 
     if (await bcrypt.compare(password, user.password)) {
