@@ -11,5 +11,16 @@ const formattimestamp = (timestamp) => {
     console.log(formattedtimestamp);
     return formattedtimestamp;
   };
+
+
+  const changeNotesFormat = (notes) => {
+    let data = [];
+    for (let timestamp of notes.keys()) {
+      data.push({
+        [timestamp]: notes.get(timestamp),
+      });
+    }
+    return data;
+  };
   
-module.exports={formattimestamp};
+module.exports={formattimestamp,changeNotesFormat};
