@@ -1,9 +1,8 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const cors=require('cors');
+const cors = require("cors");
 
-
-require('dotenv').config();
+require("dotenv").config();
 const bodyparser = require("body-parser");
 // api route
 const api = require("./routes/api");
@@ -12,18 +11,18 @@ app.use(cors());
 app.use(bodyparser.json());
 app.use("/api", api);
 
-const mongodb = "mongodb://127.0.0.1/notedDB";
+const uri = process.env.MONGODB_URI;
 
-mongoose.connect(mongodb).catch((err) => {
-  console.log(`mongodb connection error: ${err}`);
-});
-
-const db = mongoose.connection;
-
-//to log errors after initial connection
-db.on("error", (err) => {
-  console.log(`mongoDB error: ${err}`);
-});
+//Connect to monodb atlas
+mongoose
+  .connect(uri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => {
+    console.log("connected to DB......");
+  })
+  .catch((err) => console.log(err));
 
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
