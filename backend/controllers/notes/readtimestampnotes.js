@@ -1,29 +1,13 @@
 const Video = require("../../models/video");
 const jwt = require("jsonwebtoken");
 const url = require("url");
-const formattimestamp=(timestamp)=>{
-    const timearr = timestamp.split(":");
-    while (timearr.length !== 3) {
-      timearr.unshift("00");
-    }
-    let formattedtimestamp="";
-    timearr.forEach((element,index) => {
-        if(index===2) formattedtimestamp+=element;
-        else
-            formattedtimestamp+=element+":";
-    });
-    console.log(formattedtimestamp);
-    return formattedtimestamp;
-}
+const {formattimestamp}=require('../../utils/notes');
+const { authByToken } = require("../../utils/auth");
 const readtimestampnotes = async (req, res) => {
-  const token = req.headers["authorization"].split(" ")[1];
+  
 
   try {
-    const user = jwt.verify(token, process.env.JWT_AUTH_SECRET);
-    if (!user) {
-      res.status(404).json({ message: "user not logged in" });
-    }
-    const user_id = user._id;
+    const user_id=authByToken(req);
     let { videourl: video_url, timestamp } = req.body;
     
     
