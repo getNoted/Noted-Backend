@@ -18,7 +18,7 @@ const readnotes = async (req, res) => {
       console.log(video.notes);
       const data = changeNotesFormat(video.notes);
       console.log(data);
-      res.json({ message: "success", data: data });
+      res.json({ message: "success", data: data,videoname:video.video_name });
     } else {
       res.status(200).json({ message: "not found" });
     }
