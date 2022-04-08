@@ -8,11 +8,9 @@ const updatenotes = async (req, res) => {
   try {
     user_id=authByToken(req);
     let {
-      video_url,
       videoname: video_name,
       timestamp,
       content,
-      foldername: folder,
     } = req.body;
     const { v: video_id } = url.parse(video_url, true).query;
 
