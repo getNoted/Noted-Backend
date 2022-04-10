@@ -9,10 +9,12 @@ const readnotes = async (req, res) => {
     if (!user) {
       res.status(404).json({ message: "user not logged in" });
     }
-    const user_id = user._id;
-
+    const user_id = user.user_id;
+    console.log(user_id);
     const { videoname: video_name } = req.params;
+    
     const video = await Video.findOne({ video_name, user_id });
+    console.log(video);
     if (video) {
       const notes = video.notes;
       console.log(video.notes);
