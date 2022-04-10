@@ -13,14 +13,12 @@ const video = require("./video");
 const deletetimestamp=require("./deletetimestampnotes");
 const videos = require("./videos");
 const updatenotes = require("./updatenotes");
+const timestamp= require('./timestamp');
 
 router.use("/v1/signup", signup);
 router.use("/v1/signin", signin);
 router.use("/v1/resetpassword", changepassword);
-router.use("/v1/notes/timestamp/create", createnotes);
-router.use("/v1/notes/timestamp/read", readtimestampnotes);
+router.use("/v1/notes/timestamp", timestamp);
 router.use("/v1/video", video);
-router.use("/v1/notes/timestamp/delete",deletetimestamp);
 router.use("/v1/videos",videos);
-router.use("/v1/notes/timestamp/update",updatenotes);
 module.exports = router;
