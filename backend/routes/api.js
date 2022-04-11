@@ -8,6 +8,7 @@ const signup = require("./signup");
 const signin = require("./signin");
 const changepassword = require("./changepassword");
 const video = require("./video");
+const folders = require("./folders");
 const videos = require("./videos");
 const timestamp = require("./timestamp");
 
@@ -18,5 +19,7 @@ router.use("/v1/signin", signin);
 router.use("/v1/resetpassword", changepassword);
 router.use("/v1/notes/timestamp", timestamp);
 router.use("/v1/video", video);
+router.use("/v1/folder", folders);
 router.use("/v1/videos", videos);
+
 module.exports = router;
