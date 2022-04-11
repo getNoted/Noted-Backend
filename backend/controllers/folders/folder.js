@@ -1,9 +1,8 @@
 const User = require("../../models/user");
 const {
   authByToken,
-  softDeleteFolder,
-  checkIfDeleted,
 } = require("../../utils/auth");
+const {checkIfDeleted,softDeleteFolder}=require('../../utils/folder');
 
 const deleteFolder = async (req, res) => {
   const { folder_name } = req.body;
