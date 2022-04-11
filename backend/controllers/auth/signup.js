@@ -6,18 +6,25 @@ const signup = async (req, res) => {
   const { email, username, password: plainTextPassword } = req.body;
 
   const password = await brcrypt.hash(plainTextPassword, 10);
+  //create folders array with default folder
+  folders={};
+  folders=createFolder(folders,"default");
 
   try {
     const newUser = await User.create({
       email,
       username,
       password,
+      folders
     });
+    console.log(newUser);
     const user_id = newUser._id;
+
+
     const token = jwt.sign(
       { username, email, user_id },
       process.env.JWT_AUTH_SECRET
-    );
+      );
     res
       .status(200)
       .json({ message: "user created successfully", token: token });
@@ -39,5 +46,13 @@ const signup = async (req, res) => {
     
   }
 };
+
+const createFolder=(folders,foldername)=>{
+  const def={
+    is_deleted:false
+  }
+  folders[foldername]=def;
+  return folders;
+}
 
 module.exports = { signup };
