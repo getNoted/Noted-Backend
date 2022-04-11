@@ -1,6 +1,7 @@
 const brcrypt = require("bcrypt");
 const User = require("../../models/user");
 const jwt = require("jsonwebtoken");
+const {createFolder}=require('../../utils/folder');
 
 const signup = async (req, res) => {
   const { email, username, password: plainTextPassword } = req.body;
@@ -47,12 +48,6 @@ const signup = async (req, res) => {
   }
 };
 
-const createFolder=(folders,foldername)=>{
-  const def={
-    is_deleted:false
-  }
-  folders[foldername]=def;
-  return folders;
-}
+
 
 module.exports = { signup };
