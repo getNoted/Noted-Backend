@@ -33,6 +33,29 @@ const createfolder = async (req, res) => {
   }
 }
 
+const getFolders=async (req,res)=>{
+  const _id = authByToken(req);
+  const user = await User.findOne({ _id });
+  try {
+    if (user) {
+      const { folders } = user;
+      let folder_names = [];
+      for (let folder in folders) {
+        if (folders.hasOwnProperty(folder)) {
+          if(!checkIfDeleted(folders,folder)){
+            folder_names.push(folder);
+          }
+        }
+      }
+      res.status(200).json({ message: "success", folder_names });
+    } else {
+      res.status(404).json({ message: "user not found" });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 const deleteFolder = async (req, res) => {
   const { folder_name } = req.body;
   if (folder_name === "default") {
@@ -71,4 +94,4 @@ const deleteFolder = async (req, res) => {
   }
 };
 
-module.exports = { deleteFolder, createfolder };
+module.exports = { deleteFolder, createfolder, getFolders };
