@@ -84,23 +84,22 @@ const updatenotes = async (req, res) => {
   try {
     user_id = authByToken(req);
     let { videoname: video_name, timestamp, content } = req.body;
-    const { v: video_id } = url.parse(video_url, true).query;
-
-    const video = await Video.findOne({ video_id, user_id });
+    
+    const video = await Video.findOne({ video_name, user_id });
     timestamp = formattimestamp(timestamp);
     if (video) {
       const updatednotes = video.notes;
       updatednotes.set(timestamp, content);
 
       await Video.updateOne(
-        { user_id, video_id },
+        { user_id, video_name },
         {
           $set: {
             notes: updatednotes,
           },
         }
       );
-      res.status(200).json({ message: "updated" });
+      res.status(200).json({ message: "success" });
     } else {
       res.status(404).json({ message: "no video exists" });
     }
