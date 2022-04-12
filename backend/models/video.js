@@ -18,6 +18,7 @@ const videoSchema = new mongoose.Schema(
     folder: {
       type: String,
       required: true,
+      index:true
     },
     notes: {
       type: Map,
@@ -29,5 +30,17 @@ const videoSchema = new mongoose.Schema(
 );
 
 const Video = mongoose.model("Video", videoSchema);
+
+
+// indexing
+
+videoSchema.index({user_id:1,video_id:-1},(err,res)=>{
+  if(err){
+    console.log(err)
+  }
+});
+
+
+
 
 module.exports = Video;
