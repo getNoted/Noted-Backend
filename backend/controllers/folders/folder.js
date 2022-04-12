@@ -35,6 +35,7 @@ const createfolder = async (req, res) => {
 
 const getFolders=async (req,res)=>{
   const _id = authByToken(req);
+  let isDeleted=req.query.deleted;
   const user = await User.findOne({ _id });
   try {
     if (user) {
@@ -42,12 +43,12 @@ const getFolders=async (req,res)=>{
       let folder_names = [];
       for (let folder in folders) {
         if (folders.hasOwnProperty(folder)) {
-          if(!checkIfDeleted(folders,folder)){
+          if(checkIfDeleted(folders,folder).toString()===isDeleted){
             folder_names.push(folder);
           }
         }
       }
-      res.status(200).json({ message: "success", folder_names });
+      res.status(200).json({ message: "fetched all folders", folder_names });
     } else {
       res.status(404).json({ message: "user not found" });
     }
