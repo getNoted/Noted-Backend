@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const Video = require("../../models/video");
 const { authByToken } = require("../../utils/auth");
+const { checkIfDeleted } = require("../../utils/folder");
 const { changeNotesFormat } = require("../../utils/notes");
 
 const readnotes = async (req, res) => {
@@ -20,4 +21,31 @@ const readnotes = async (req, res) => {
   }
 };
 
-module.exports = { readnotes };
+const deleteVideo=async (req,res)=>{
+   const {video_id}=req.body;
+   try{
+    const user_id=authByToken(req);
+    const video=await Video.findOneAndUpdate({user_id,video_id},{
+      $set:{
+        is_deleted:true
+      }
+    });
+
+    if(!video){
+      res.status(404).json({message:"video not found"});
+    }
+
+    else{
+      res.status(200).json({message:"success"})
+    }
+
+   }catch(err){
+    console.log(err);
+   }
+}
+
+
+
+
+
+module.exports = { readnotes,deleteVideo };
