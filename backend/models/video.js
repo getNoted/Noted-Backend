@@ -40,6 +40,12 @@ videoSchema.index({user_id:1,video_id:-1},(err,res)=>{
   }
 });
 
+videoSchema.index({user_id:1,video_name:-1},(err,res)=>{
+  if(err){
+    console.log(err);
+  }
+})
+
 
 
 
