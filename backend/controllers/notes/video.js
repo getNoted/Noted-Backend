@@ -13,7 +13,7 @@ const readnotes = async (req, res) => {
       const data = changeNotesFormat(video.notes);
       res.json({ message: "success", data: data, videoname: video.video_name });
     } else {
-      res.status(404).json({ message: "not found" });
+      res.json({ message: "not found" });
     }
   } catch (err) {
     console.log(err);
