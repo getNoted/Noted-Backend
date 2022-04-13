@@ -113,12 +113,12 @@ const updatenotes = async (req, res) => {
 const deletetimestamp = async (req, res) => {
   try {
     const user_id = authByToken(req);
-    let { video_name, timestamp } = req.body;
+    let { video_id, timestamp } = req.body;
 
     timestamp = formattimestamp(timestamp);
 
-    const video = await Video.findOne({ video_name, user_id });
-    const video_id = video.video_id;
+    const video = await Video.findOne({ user_id, video_id });
+   
     if (!video) {
       res.status(404).json({ message: "video not found" });
     } else {
@@ -130,7 +130,7 @@ const deletetimestamp = async (req, res) => {
         notes.delete(timestamp);
 
         await Video.updateOne(
-          { video_id, user_id },
+          { user_id, video_id },
           {
             $set: {
               notes: notes,
