@@ -1,9 +1,11 @@
 const mongoose = require("mongoose");
 
 const folderSchema = new mongoose.Schema({
-  folder_name: String,
+  folder_name: {
+    type:String,
+    unique:true
+  },
   is_deleted: Boolean,
-  unique: true,
 }, { timestamps: true });
 
 const userSchema = new mongoose.Schema({
