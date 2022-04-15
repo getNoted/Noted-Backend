@@ -10,4 +10,12 @@ const checkIfDeleted = (folders, folder_name) => {
   const currentFolder = folders[folder_name];
   return currentFolder.is_deleted;
 };
-module.exports = {softDeleteFolder, checkIfDeleted };
+
+const editName=(folders,old_folder_name,new_folder_name)=>{
+  const currentFolder=folders[old_folder_name];
+  folders[new_folder_name]=folders[old_folder_name];
+  delete folders[old_folder_name];
+  return folders;
+}
+module.exports = {softDeleteFolder, checkIfDeleted,editName };
+

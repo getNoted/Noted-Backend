@@ -43,6 +43,7 @@ const createnotes = async (req, res) => {
         video_name,
         folder,
         notes,
+        is_deleted:false
       });
 
       res.status(200).json({ message: "success" });

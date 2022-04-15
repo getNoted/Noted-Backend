@@ -6,7 +6,7 @@ const readallvideos = async (req,res) => {
 
   try {
     const user_id=authByToken(req);
-    const videos = await Video.find({user_id },{ video_id: 1, video_name: 1,video_url:1 });
+    const videos = await Video.find({user_id,is_deleted:false},{ video_id: 1, video_name: 1,video_url:1 });
     
     if (!videos) {
       res.status(404).json({ message: "no video not found" });
