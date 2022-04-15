@@ -1,10 +1,7 @@
 const mongoose = require("mongoose");
 
 const folderSchema = new mongoose.Schema({
-  folder_name: {
-    type:String,
-    unique:true
-  },
+  folder_name: String,
   is_deleted: Boolean,
 }, { timestamps: true });
 
@@ -29,6 +26,4 @@ const userSchema = new mongoose.Schema({
 });
 
 const User = mongoose.model("User", userSchema);
-const Folder = mongoose.model("Folder", folderSchema);
 module.exports = User;
-module.exports = Folder;
