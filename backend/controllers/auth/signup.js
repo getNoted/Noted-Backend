@@ -13,8 +13,11 @@ const signup = async (req, res) => {
       email,
       username,
       password,
-      folders:[{folder_name:"default",is_deleted:false}]
+      folders:[]
     });
+
+    newUser.folders.push({folder_name:"default",is_deleted:false,user_id:newUser._id});
+    await newUser.save();
     console.log(newUser);
     const user_id = newUser._id;
 

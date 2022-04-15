@@ -4,23 +4,16 @@ const { createFolder, checkIfDeleted, softDeleteFolder } = require("../../utils/
 
 const createfolder = async (req, res) => {
   const { folder_name } = req.body;
-  const _id = authByToken(req);
-  const user = await User.findOne({ _id });
   try {
+    const _id = authByToken(req);
+    const user = await User.findOne({ _id });
     if (user) {
-      if (!user.folders.hasOwnProperty(folder_name)) {
-        const { folders } = user;
-        const updatedFolders = createFolder(folders, folder_name);
-        await User.updateOne(
-          { _id },
-          {
-            $set: {
-              folders: updatedFolders,
-            },
-          }
-        );
+      const folder=User.findOne({folder_name});
+      console.log(folder);
+      if (!folder) {
+        
         res.status(200).json({ message: "folder created" });
-        console.log(folders)
+        
       } else {
         res.status(400).json({ message: "folder already exists" });
       }
