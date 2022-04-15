@@ -24,10 +24,17 @@ const videoSchema = new mongoose.Schema(
       of: String,
       required: true,
     },
+    is_deleted:{
+      type:Boolean,
+      required:true
+    }
   },
   { timestamps: { createdAt: "created_at", updatedAt: "modified_on" } }
 );
 
 const Video = mongoose.model("Video", videoSchema);
+
+videoSchema.index({user_id:1,video_id:-1});
+
 
 module.exports = Video;
