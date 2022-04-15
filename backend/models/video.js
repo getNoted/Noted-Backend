@@ -25,6 +25,10 @@ const videoSchema = new mongoose.Schema(
       of: String,
       required: true,
     },
+    is_deleted:{
+      type:Boolean,
+      required:true
+    }
   },
   { timestamps: { createdAt: "created_at", updatedAt: "modified_on" } }
 );
@@ -45,7 +49,6 @@ videoSchema.index({user_id:1,video_name:-1},(err,res)=>{
     console.log(err);
   }
 })
-
 
 
 
