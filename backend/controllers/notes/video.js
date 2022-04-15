@@ -1,9 +1,11 @@
 const jwt = require("jsonwebtoken");
+const User = require("../../models/user");
 const Video = require("../../models/video");
 const { authByToken } = require("../../utils/auth");
 
 const { checkIfDeleted } = require("../../utils/folder");
 const { changeNotesFormat } = require("../../utils/notes");
+const {ifExists} =require('../../utils/folder');
 const readnotes = async (req, res) => {
   try {
     const user_id = authByToken(req);
@@ -76,4 +78,35 @@ const editName=async (req,res)=>{
 }
 
 
-module.exports = { readnotes,deleteVideo,editName};
+const changeFolder=async (req,res)=>{
+  const {video_id,folder_name}=req.body;
+  const user_id=authByToken(req);
+  console.log(user_id);
+  let folder=await ifExists(user_id,folder_name);
+  if(folder.folders.length!==0){
+    //folder exist so change the folder of the video
+
+    const video=await Video.findOneAndUpdate({user_id,video_id},{
+      $set:{
+        folder:folder_name
+      }
+    });
+
+    if(video){
+      res.json({message:"success"});
+    }
+    else{
+      //video not found
+      res.status(404).json({message:"video not found"});
+    }
+
+  }
+  else{
+    //folder does not exist
+    res.status(404).json({message:"folder not found"});
+  }
+
+}
+
+
+module.exports = { readnotes,deleteVideo,editName,changeFolder};

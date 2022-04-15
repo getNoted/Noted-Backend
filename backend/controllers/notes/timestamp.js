@@ -12,8 +12,7 @@ const createnotes = async (req, res) => {
       video_url,
       videoname: video_name,
       timestamp,
-      content,
-      foldername: folder,
+      content
     } = req.body;
     console.log(video_url);
     const { v: video_id } = url.parse(video_url, true).query;
@@ -41,7 +40,7 @@ const createnotes = async (req, res) => {
         video_url,
         user_id,
         video_name,
-        folder,
+        folder:"default",
         notes,
         is_deleted:false
       });

@@ -6,6 +6,7 @@ const {
   checkIfDeleted,
   softDeleteFolder,
   editName,
+  ifExists
 } = require("../../utils/folder");
 
 
@@ -16,23 +17,7 @@ const createfolder = async (req, res) => {
     const _id = authByToken(req);
     const user = await User.findOne({ _id });
     if (user) {
-      console.log(user.folders);
-      let folder=await User.findOne({_id},{
-        folders: {
-          $filter: {
-            input: "$folders",
-            as:"folder",
-            cond:{
-              $and:[
-                {$eq:["$$folder.folder_name",folder_name]},
-                {$eq:["$$folder.is_deleted",false]}
-               
-              ]
-            }
-          },
-         
-        }
-      });
+      let folder=ifExists(_id,folder_name);
       console.log(folder);
       if (folder.folders.length===0) {
         folder={folder_name:folder_name,is_deleted:false,user_id:_id};
@@ -97,10 +82,10 @@ const getFolders=async (req,res)=>{
 
 // Delete a folder
 const deleteFolder = async (req, res) => {
-  let { folder_id } = req.body;
+  let { folder_id,folder_name } = req.body;
   console.log(folder_id);
   folder_id = mongoose.Types.ObjectId(folder_id);
-  if (folder_id === "default") {
+  if (folder_name === "default") {
     res.status(400).json({ message: "default folder cannot be deleted" });
   } else {
     try {
@@ -113,10 +98,12 @@ const deleteFolder = async (req, res) => {
       console.log(folder);
       
       if (folder) {
-        console.log(folder);
-        
-        
-          
+        await Video.updateMany({user_id:_id,folder:folder_name},{
+          $set:{
+            is_deleted:true
+          }
+        });
+      
         res.status(200).json({message:"success"});
         
         
@@ -141,22 +128,7 @@ const editFoldername = async (req, res) => {
     try {
       const _id = authByToken(req);
       
-      let folder=await User.findOne({ _id },{
-        folders: {
-          $filter: {
-            input: "$folders",
-            as:"folder",
-            cond:{
-              $and:[
-                {$eq:["$$folder.folder_name",new_folder_name]},
-                {$eq:["$$folder.is_deleted",false]},
-               
-              ]
-            }
-          },
-         
-        },
-    });
+      let folder=await ifExists(_id,new_folder_name);
     
     if(folder.folders.length===0){
       //rename the folder
@@ -167,6 +139,11 @@ const editFoldername = async (req, res) => {
       });
       
       if(folder){
+        await Video.updateMany({user_id:_id,folder:old_folder_name},{
+          $set:{
+            folder:new_folder_name
+          }
+        })
         res.status(200).json({message:"success"});
       }
       else{
@@ -178,7 +155,7 @@ const editFoldername = async (req, res) => {
     else{
       //cannot rename because one with the same name already exists
 
-      res.status(400).json({message:"folder name already exists"});
+      res.status(400).json({message:"already exists"});
     }
   
   } catch (err) {
