@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const folderSchema = new mongoose.Schema({
   folder_name: String,
   is_deleted: Boolean,
+  deletedAt:Date
 }, { timestamps: true });
 
 const userSchema = new mongoose.Schema({

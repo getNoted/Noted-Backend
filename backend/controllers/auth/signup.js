@@ -7,16 +7,13 @@ const signup = async (req, res) => {
   const { email, username, password: plainTextPassword } = req.body;
 
   const password = await brcrypt.hash(plainTextPassword, 10);
-  //create folders array with default folder
-  folders={};
-  folders=createFolder(folders,"default");
 
   try {
     const newUser = await User.create({
       email,
       username,
       password,
-      folders
+      folders:[{folder_name:"default",is_deleted:false}]
     });
     console.log(newUser);
     const user_id = newUser._id;

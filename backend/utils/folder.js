@@ -1,10 +1,4 @@
-const createFolder = (folders, foldername) => {
-  const def = {
-    is_deleted: false,
-  };
-  folders[foldername] = def;
-  return folders;
-};
+
 
 const softDeleteFolder = (folders, folder_name) => {
   const currentFolder = folders[folder_name];
@@ -16,4 +10,4 @@ const checkIfDeleted = (folders, folder_name) => {
   const currentFolder = folders[folder_name];
   return currentFolder.is_deleted;
 };
-module.exports = { createFolder, softDeleteFolder, checkIfDeleted };
+module.exports = {softDeleteFolder, checkIfDeleted };
