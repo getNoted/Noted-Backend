@@ -4,9 +4,6 @@ const { authByToken } = require("../../utils/auth");
 
 const { checkIfDeleted } = require("../../utils/folder");
 const { changeNotesFormat } = require("../../utils/notes");
-
-
-const { changeNotesFormat } = require("../../utils/notes");
 const readnotes = async (req, res) => {
   try {
     const user_id = authByToken(req);
@@ -46,7 +43,8 @@ const deleteVideo=async (req,res)=>{
    }catch(err){
     console.log(err);
    }
-=======
+  }
+
 
 const editName=async (req,res)=>{
   const {video_id,new_video_name}=req.body;
@@ -78,5 +76,4 @@ const editName=async (req,res)=>{
 }
 
 
-module.exports = { readnotes,deleteVideo,editName };
-
+module.exports = { readnotes,deleteVideo,editName};
