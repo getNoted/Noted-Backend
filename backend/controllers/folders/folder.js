@@ -1,3 +1,4 @@
+const { default: mongoose } = require("mongoose");
 const User = require("../../models/user");
 const Video = require("../../models/video");
 const { authByToken } = require("../../utils/auth");
@@ -10,23 +11,19 @@ const {
 
 const createfolder = async (req, res) => {
   const { folder_name } = req.body;
-  const _id = authByToken(req);
-  const user = await User.findOne({ _id });
   try {
+    const _id = authByToken(req);
+    const user = await User.findOne({ _id });
     if (user) {
-      if (!user.folders.hasOwnProperty(folder_name)) {
-        const { folders } = user;
-        const updatedFolders = createFolder(folders, folder_name);
-        await User.updateOne(
-          { _id },
-          {
-            $set: {
-              folders: updatedFolders,
-            },
-          }
-        );
+      console.log(user.folders);
+      let folder=await User.findOne({'folders.folder_name':folder_name,'folders.user_id':_id});
+      console.log(folder);
+      if (!folder) {
+        folder={folder_name:folder_name,is_deleted:false,user_id:_id};
+        user.folders.push(folder);
+        await user.save();
         res.status(200).json({ message: "folder created" });
-        console.log(folders)
+        
       } else {
         res.status(400).json({ message: "folder already exists" });
       }
@@ -40,21 +37,35 @@ const createfolder = async (req, res) => {
 }
 
 const getFolders=async (req,res)=>{
-  const _id = authByToken(req);
-  let isDeleted=req.query.deleted;
-  const user = await User.findOne({ _id });
   try {
+    const _id = authByToken(req);
+    const user = await User.findOne({ _id });
+    let is_deleted=req.query.deleted;
+    console.log(is_deleted==="true");
+    
     if (user) {
-      const { folders } = user;
-      let folder_names = [];
-      for (let folder in folders) {
-        if (folders.hasOwnProperty(folder)) {
-          if(checkIfDeleted(folders,folder).toString()===isDeleted){
-            folder_names.push(folder);
-          }
-        }
-      }
-      res.status(200).json({ message: "fetched all folders", folder_names });
+     
+
+    const folders = await User.find({ _id },{
+        folders: {
+          $filter: {
+            input: "$folders",
+            as:"folder",
+            cond:{
+              $and:[
+                {$eq:["$$folder.is_deleted",is_deleted==="true"]},
+               
+              ]
+            }
+          },
+         
+        },
+
+        
+        
+      }).sort({'folders.createdAt':1});
+      console.log(folders);
+      res.status(200).json({ message: "success", folders:folders[0].folders});
     } else {
       res.status(404).json({ message: "user not found" });
     }
@@ -65,36 +76,31 @@ const getFolders=async (req,res)=>{
 
 // Delete a folder
 const deleteFolder = async (req, res) => {
-  const { folder_name } = req.body;
-  if (folder_name === "default") {
+  let { folder_id } = req.body;
+  console.log(folder_id);
+  folder_id = mongoose.Types.ObjectId(folder_id);
+  if (folder_id === "default") {
     res.status(400).json({ message: "default folder cannot be deleted" });
   } else {
     try {
       const _id = authByToken(req);
-      const user = await User.findOne({ _id });
-
-      if (user) {
-        if (!user.folders.hasOwnProperty(folder_name)) {
-          res.status(404).json({ message: "folder not found" });
-        } else {
-          const { folders } = user;
-          if (checkIfDeleted(folders, folder_name)) {
-            res.status(400).json({ message: "folder already deleted" });
-          } else {
-            const updatedFolders = softDeleteFolder(folders, folder_name);
-            await User.updateOne(
-              { _id },
-              {
-                $set: {
-                  folders: updatedFolders,
-                },
-              }
-            );
-            res.status(200).json({ message: "success" });
-          }
+      const folder=await User.findOneAndUpdate({_id:_id,'folders._id':folder_id},{
+        $set:{
+          'folders.$.is_deleted':true
         }
+      });
+      console.log(folder);
+      
+      if (folder) {
+        console.log(folder);
+        
+        
+          
+        res.status(200).json({message:"success"});
+        
+        
       } else {
-        res.status(404).json({ message: "user not found" });
+        res.status(404).json({ message: "folder not found" });
       }
     } catch (err) {
       console.log(err);

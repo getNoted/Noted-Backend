@@ -3,7 +3,8 @@ const mongoose = require("mongoose");
 const folderSchema = new mongoose.Schema({
   folder_name: String,
   is_deleted: Boolean,
-  unique: true,
+  user_id:mongoose.Schema.Types.ObjectId,
+  deletedAt:Date
 }, { timestamps: true });
 
 const userSchema = new mongoose.Schema({
@@ -27,6 +28,4 @@ const userSchema = new mongoose.Schema({
 });
 
 const User = mongoose.model("User", userSchema);
-const Folder = mongoose.model("Folder", folderSchema);
 module.exports = User;
-module.exports = Folder;
