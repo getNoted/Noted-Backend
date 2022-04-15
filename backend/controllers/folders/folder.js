@@ -8,10 +8,13 @@ const createfolder = async (req, res) => {
     const _id = authByToken(req);
     const user = await User.findOne({ _id });
     if (user) {
-      const folder=User.findOne({folder_name});
+      console.log(user.folders);
+      let folder=await User.findOne({'folders.folder_name':folder_name,'folders.user_id':_id});
       console.log(folder);
       if (!folder) {
-        
+        folder={folder_name:folder_name,is_deleted:false,user_id:_id};
+        user.folders.push(folder);
+        await user.save();
         res.status(200).json({ message: "folder created" });
         
       } else {
