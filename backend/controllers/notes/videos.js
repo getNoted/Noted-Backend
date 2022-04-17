@@ -8,11 +8,12 @@ const readallvideos = async (req,res) => {
     const user_id=authByToken(req);
     const page=parseInt(req.query.page);
     const limit=parseInt(req.query.limit);
+    const deleted=req.query.deleted;
     const startIndex = (page - 1) * limit
     const endIndex = page * limit
     const totalDocuments= await Video.countDocuments({user_id });
 
-    const result = await Video.find({user_id },{ video_id: 1, video_name: 1,video_url:1 }).skip(startIndex).limit(limit);
+    const result = await Video.find({user_id,is_deleted:deleted==='true' },{ video_id: 1, video_name: 1,video_url:1 }).skip(startIndex).limit(limit);
 
     if (!result) {
       res.status(404).json({ message: "no video not found" });
