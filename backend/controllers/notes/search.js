@@ -5,8 +5,9 @@ const { authByToken } = require("../../utils/auth");
 const searchVideoname = async (req, res) => {
     try{
         const user_id = authByToken(req);
-        const { videoname } = req.query;
-        const videos = await Video.find({user_id, video_name: {$regex: `${videoname}`, $options: "i"}});
+        const videoname = req.query.videoname;
+        const deleted =req.query.deleted;
+        const videos = await Video.find({user_id, is_deleted:deleted==='true', video_name: {$regex: `${videoname}`, $options: "i"}});
         if(videos){
             res.status(200).json({message: "fetched relevant videos", videos});
         }else{
