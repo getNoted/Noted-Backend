@@ -79,7 +79,7 @@ const deleteFolder = async (req, res) => {
     try {
       const _id = authByToken(req);
       const folder = await User.findOneAndUpdate(
-        { _id: _id, "folders._id": folder_id },
+        { _id: _id, "folders._id": folder_id,"folders.folder_name":folder_name },
         {
           $set: {
             "folders.$.is_deleted": true,
