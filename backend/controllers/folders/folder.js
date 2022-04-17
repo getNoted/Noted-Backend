@@ -17,7 +17,7 @@ const createfolder = async (req, res) => {
     const _id = authByToken(req);
     const user = await User.findOne({ _id });
     if (user) {
-      let folder = ifExists(_id, folder_name);
+      let folder = await ifExists(_id, folder_name);
       console.log(folder);
       if (folder.folders.length === 0) {
         folder = { folder_name: folder_name, is_deleted: false, user_id: _id };

@@ -18,12 +18,13 @@ mongoose
   .connect(uri, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+
   })
   .then(() => {
     console.log("connected to DB......");
   })
   .catch((err) => console.log(err));
-
+  mongoose.set("debug",true);
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
   console.log(`server is running on port ${PORT}`);
