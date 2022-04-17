@@ -3,10 +3,8 @@ const User = require("../../models/user");
 const Video = require("../../models/video");
 const { authByToken } = require("../../utils/auth");
 const {
-  checkIfDeleted,
-  softDeleteFolder,
-  editName,
   ifExists,
+  findFolder
 } = require("../../utils/folder");
 
 //create a new folder
@@ -78,17 +76,18 @@ const deleteFolder = async (req, res) => {
   } else {
     try {
       const _id = authByToken(req);
-      const folder = await User.findOneAndUpdate(
-        { _id: _id, "folders._id": folder_id,"folders.folder_name":folder_name },
-        {
-          $set: {
-            "folders.$.is_deleted": true,
-          },
-        }
-      );
-      console.log(folder);
-
-      if (folder) {
+     
+      const folder=await findFolder(_id,folder_name,folder_id);
+      if (folder.folders.length!==0) {
+        await User.findOneAndUpdate(
+          { _id: _id, "folders._id": folder_id},
+          {
+            $set: {
+              "folders.$.is_deleted": true,
+            },
+          }
+        );
+        
         await Video.updateMany(
           { user_id: _id, folder: folder_name },
           {
@@ -122,16 +121,17 @@ const editFoldername = async (req, res) => {
 
       if (folder.folders.length === 0) {
         //rename the folder
-        let folder = await User.findOneAndUpdate(
-          { _id: _id, "folders._id": folder_id },
-          {
-            $set: {
-              "folders.$.folder_name": new_folder_name,
-            },
-          }
-        );
-
-        if (folder) {
+        let folder=await findFolder(_id,old_folder_name,folder_id);
+       
+        if (folder.folders.length!==0) {
+          let folder = await User.findOneAndUpdate(
+            { _id: _id, "folders._id": folder_id},
+            {
+              $set: {
+                "folders.$.folder_name": new_folder_name,
+              },
+            }
+          );
           await Video.updateMany(
             { user_id: _id, folder: old_folder_name },
             {
