@@ -18,7 +18,7 @@ const readallvideos = async (req,res) => {
     if (!result) {
       res.status(404).json({ message: "no video not found" });
     } else {
-      res.status(200).json({ message: "success",result });
+      res.status(200).json({ message: "success",videos:result });
     }
   } catch (err) {
     console.log(err);

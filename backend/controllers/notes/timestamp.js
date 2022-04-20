@@ -17,7 +17,7 @@ const createnotes = async (req, res) => {
     console.log(video_url);
     const { v: video_id } = url.parse(video_url, true).query;
 
-    const video = await Video.findOne({ video_id, user_id });
+    const video = await Video.findOne({ video_id, user_id,is_deleted:false});
     timestamp = formattimestamp(timestamp);
     if (video) {
       const updatednotes = video.notes;

@@ -20,7 +20,7 @@ const signin = async (req, res) => {
       );
       res
         .status(200)
-        .json({ message: "user signed in successfully", token: token });
+        .json({ message: "user signed in successfully", token: token,data:{username,email}});
     } else {
       res.status(400).json({ message: "incorrect password" });
     }

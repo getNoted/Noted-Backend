@@ -52,7 +52,8 @@ const editName=async (req,res)=>{
   const {video_id,new_video_name}=req.body;
   try{
     const user_id=authByToken(req);
-    let video=await Video.findOne({user_id,video_name:new_video_name});
+    let video=await Video.findOne({user_id,video_name:new_video_name,is_deleted:false});
+    console.log(video);
     if(video){
       console.log(video);
       res.status(400).json({message:"videoname already exist"});

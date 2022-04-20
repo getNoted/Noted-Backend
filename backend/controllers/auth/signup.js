@@ -28,7 +28,7 @@ const signup = async (req, res) => {
       );
     res
       .status(200)
-      .json({ message: "user created successfully", token: token });
+      .json({ message: "user created successfully", token: token,data:{username,email}});
   } catch (err) {
     if (err.code && err.code === 11000) {
       if (err.keyPattern.hasOwnProperty("email")) {
