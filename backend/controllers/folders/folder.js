@@ -156,4 +156,19 @@ const editFoldername = async (req, res) => {
   }
 };
 
-module.exports = { deleteFolder, editFoldername, createfolder, getFolders };
+
+const getVideos=async (req,res)=>{
+    const {folder_name}=req.body;
+    try{
+      const _id = authByToken(req);
+      const videos=await Video.find({user_id:_id,folder:folder_name,is_deleted:false},{_id:1,video_name:1,video_id:1}).sort({"_id":-1});
+      console.log(videos)
+      if(videos){
+        res.status(200).json({message:"success",data:videos});
+      }
+    }catch(err){
+      console.log(err);
+    }
+}
+
+module.exports = { deleteFolder, editFoldername, createfolder, getFolders,getVideos};
