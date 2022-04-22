@@ -10,7 +10,7 @@ const readnotes = async (req, res) => {
   try {
     const user_id = authByToken(req);
     const { video_id } = req.params;
-    const video = await Video.findOne({ user_id, video_id });
+    const video = await Video.findOne({ user_id, video_id,is_deleted:false });
     if (video) {
       const notes = video.notes;
       const data = changeNotesFormat(video.notes);

@@ -87,6 +87,9 @@ const updatenotes = async (req, res) => {
     
     const video = await Video.findOne({ video_name, user_id });
     timestamp = formattimestamp(timestamp);
+    if(!video.notes.has(timestamp)){
+      return res.status(404).json({message:"timestamp not found"})
+    }
     if (video) {
       const updatednotes = video.notes;
       updatednotes.set(timestamp, content);
@@ -101,7 +104,7 @@ const updatenotes = async (req, res) => {
       );
       res.status(200).json({ message: "success" });
     } else {
-      res.status(404).json({ message: "no video exists" });
+      res.status(404).json({ message: "video not found" });
     }
   } catch (err) {
     console.log(err);

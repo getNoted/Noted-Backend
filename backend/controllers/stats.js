@@ -11,7 +11,7 @@ const getStats=async (req,res)=>{
             const stats={};
             console.log(user);
             stats.folders=user.folders.length;
-            const videos=await Video.find({user_id:_id});
+            const videos=await Video.find({user_id:_id,is_deleted:false});
             stats.videos=videos.length;
             res.json({message:"success", data:stats})
         }

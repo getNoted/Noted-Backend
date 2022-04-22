@@ -161,6 +161,10 @@ const getVideos=async (req,res)=>{
     const {folder_name}=req.body;
     try{
       const _id = authByToken(req);
+      const folder=await ifExists(_id,folder_name);
+      if(folder.folders.length===0){
+        return res.status(404).json({message:"folder not found"});
+      }
       const videos=await Video.find({user_id:_id,folder:folder_name,is_deleted:false},{_id:1,video_name:1,video_id:1}).sort({"_id":-1});
       console.log(videos)
       if(videos){
