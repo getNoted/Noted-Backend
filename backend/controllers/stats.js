@@ -10,7 +10,11 @@ const getStats=async (req,res)=>{
         if(user){
             const stats={};
             console.log(user);
-            stats.folders=user.folders.length;
+            let folders=user.folders;
+            folders=folders.filter(folder=>{
+                return folder.is_deleted===false
+            });
+            stats.folders=folders.length;
             const videos=await Video.find({user_id:_id,is_deleted:false});
             stats.videos=videos.length;
             res.json({message:"success", data:stats})

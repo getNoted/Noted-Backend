@@ -69,7 +69,7 @@ const readtimestampnotes = async (req, res) => {
 
     if (video.notes.has(timestamp)) {
       const note = video.notes.get(timestamp);
-      res.json({ message: "success", notes: note });
+      res.json({ message: "success", notes: note,videoname:video.video_name});
     } else {
       res.status(404).json({ message: "timestamp does not exist" });
     }

@@ -13,7 +13,9 @@ const readnotes = async (req, res) => {
     const video = await Video.findOne({ user_id, video_id,is_deleted:false });
     if (video) {
       const notes = video.notes;
-      const data = changeNotesFormat(video.notes);
+      const sortedNotes = new Map([...notes.entries()].sort());
+      let data = changeNotesFormat(sortedNotes);
+      console.log(data);
       res.json({ message: "success", data: data, videoname: video.video_name });
     } else {
       res.json({ message: "not found" });
