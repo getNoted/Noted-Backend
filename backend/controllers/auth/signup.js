@@ -32,11 +32,11 @@ const signup = async (req, res) => {
   } catch (err) {
     if (err.code && err.code === 11000) {
       if (err.keyPattern.hasOwnProperty("email")) {
-        res.status(400).json({ message: "Email already exists" });
+        res.status(409).json({ message: "Email already exists" });
       }
 
       if (err.keyPattern.hasOwnProperty("username")) {
-        res.status(400).json({ message: "Username already exists" });
+        res.status(409).json({ message: "Username already exists" });
       }
     }
 
