@@ -3,13 +3,20 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 
 require("dotenv").config();
-app.use(cors());
+
+// setting options for CORS 
+var corsOptions = {
+  origin: ["http://localhost:3000"],
+  methods: "GET,PUT,PATCH,POST,DELETE"
+}
+
 const bodyparser = require("body-parser");
 // api route
 const api = require("./routes/api");
 const app = express();
 
 app.use(bodyparser.json());
+app.use(cors(corsOptions));
 
 
 const uri = process.env.MONGODB_URI;
