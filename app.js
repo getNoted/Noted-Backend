@@ -43,3 +43,7 @@ app.use("/api", api);
 app.get("/noted" , (req,res) => {
   res.status(200).send('welcome to noted');
 });
+
+app.get("/" , (req,res) => {
+  res.send('chal gya bc')
+} )
