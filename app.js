@@ -39,3 +39,7 @@ app.listen(PORT, () => {
 });
 
 app.use("/api", api);
+
+app.get("/noted" , (req,res) => {
+  res.status(200).send('welcome to noted');
+});
